@@ -3,6 +3,7 @@ package br.com.logique.scheduledissues; /**
  */
 
 import br.com.logique.scheduledissues.model.service.RedmineService;
+import br.com.logique.scheduledissues.util.JsonUtil;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.User;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static br.com.logique.scheduledissues.util.JsonUtil.dataToJson;
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 
@@ -28,6 +30,7 @@ public class SparkEngine {
         freeMarkerEngine.setConfiguration(freeMarkerConfiguration);
         staticFileLocation("/");
         routeIndex(freeMarkerEngine);
+        routeUsersByProject();
     }
 
     private void routeIndex(FreeMarkerEngine freeMarkerEngine) {
@@ -38,6 +41,15 @@ public class SparkEngine {
             attributes.put("users", tryGetUsers(redmineService));
             return new ModelAndView(attributes, "issue-form.ftl");
         }, freeMarkerEngine);
+    }
+
+    private void routeUsersByProject() {
+        get("/users/:id", (request, response) -> {
+            String id = request.params(":id");
+            RedmineService redmineService = getRedmineService();
+            List<User> users = redmineService.getUsersByProject(Integer.valueOf(id));
+            return dataToJson(users);
+        });
     }
 
     private List<Project> tryGetProjects(RedmineService redmineService){

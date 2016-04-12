@@ -4,9 +4,11 @@ import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.bean.Issue;
+import com.taskadapter.redmineapi.bean.Membership;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +39,14 @@ public class RedmineService {
     public List<User> getUsers() throws RedmineException {
         RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
         return mgr.getUserManager().getUsers();
+    }
+
+    public List<User> getUsersByProject(Integer idProject) throws RedmineException {
+        RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
+        List<Membership> members = mgr.getMembershipManager().getMemberships(idProject);
+        List<User> users = new ArrayList<>();
+        members.stream().forEach(m -> users.add(m.getUser()));
+        return users;
     }
 
     public static class BuilderRedmineService {
