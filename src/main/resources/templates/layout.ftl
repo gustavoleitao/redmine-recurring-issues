@@ -59,6 +59,9 @@
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="/js/ie10-viewport-bug-workaround.js"></script>
+<script src="/js/jquery-2.2.3.js"></script>
+<script src="/js/alert.js"></script>
+<script src="/js/issue.js"></script>
 </body>
 </html>
 

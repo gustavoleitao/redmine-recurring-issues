@@ -3,9 +3,9 @@ package br.com.logique.scheduledissues; /**
  */
 
 import br.com.logique.scheduledissues.model.service.RedmineService;
-import br.com.logique.scheduledissues.util.JsonUtil;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.bean.Project;
+import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
@@ -13,9 +13,7 @@ import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static br.com.logique.scheduledissues.util.JsonUtil.dataToJson;
 import static spark.Spark.get;
@@ -31,6 +29,7 @@ public class SparkEngine {
         staticFileLocation("/");
         routeIndex(freeMarkerEngine);
         routeUsersByProject();
+        routeTrackersByProject();
     }
 
     private void routeIndex(FreeMarkerEngine freeMarkerEngine) {
@@ -38,18 +37,44 @@ public class SparkEngine {
             RedmineService redmineService = getRedmineService();
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("projects", tryGetProjects(redmineService));
-            attributes.put("users", tryGetUsers(redmineService));
             return new ModelAndView(attributes, "issue-form.ftl");
         }, freeMarkerEngine);
     }
 
     private void routeUsersByProject() {
-        get("/users/:id", (request, response) -> {
+        get("projects/:id/users/", (request, response) -> {
             String id = request.params(":id");
             RedmineService redmineService = getRedmineService();
-            List<User> users = redmineService.getUsersByProject(Integer.valueOf(id));
+            List<User> users = tryGetUsersByProject(id, redmineService);
             return dataToJson(users);
         });
+    }
+
+    private void routeTrackersByProject() {
+        get("projects/:id/trackers/", (request, response) -> {
+            String id = request.params(":id");
+            RedmineService redmineService = getRedmineService();
+            List<Tracker> trackers = tryGetTrackersByProject(id, redmineService);
+            return dataToJson(trackers);
+        });
+    }
+
+    private List<Tracker> tryGetTrackersByProject(String id, RedmineService redmineService)  {
+        try {
+            return redmineService.getTrackers(Integer.valueOf(id));
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    private List<User> tryGetUsersByProject(String id, RedmineService redmineService)  {
+        try {
+            return redmineService.getUsersByProject(Integer.valueOf(id));
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
+        return Collections.EMPTY_LIST;
     }
 
     private List<Project> tryGetProjects(RedmineService redmineService){
@@ -58,7 +83,7 @@ public class SparkEngine {
         } catch (RedmineException e) {
             e.printStackTrace();
         }
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     private List<User> tryGetUsers(RedmineService redmineService){
@@ -67,7 +92,7 @@ public class SparkEngine {
         } catch (RedmineException e) {
             e.printStackTrace();
         }
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     private RedmineService getRedmineService() {
