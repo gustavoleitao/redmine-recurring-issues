@@ -18,7 +18,7 @@ public class JsonUtil {
             StringWriter sw = new StringWriter();
             mapper.writeValue(sw, data);
             return sw.toString();
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("IOException from a StringWriter?");
         }
     }

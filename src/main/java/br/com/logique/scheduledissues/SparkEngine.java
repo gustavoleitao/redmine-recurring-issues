@@ -30,6 +30,7 @@ public class SparkEngine {
         routeIndex(freeMarkerEngine);
         routeUsersByProject();
         routeTrackersByProject();
+        routeProjects();
     }
 
     private void routeIndex(FreeMarkerEngine freeMarkerEngine) {
@@ -39,6 +40,14 @@ public class SparkEngine {
             attributes.put("projects", tryGetProjects(redmineService));
             return new ModelAndView(attributes, "issue-form.ftl");
         }, freeMarkerEngine);
+    }
+
+    private void routeProjects() {
+        get("projects/", (request, response) -> {
+            RedmineService redmineService = getRedmineService();
+            List<Project> projects = tryGetProjects(redmineService);
+            return dataToJson(projects);
+        });
     }
 
     private void routeUsersByProject() {
