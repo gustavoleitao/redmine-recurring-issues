@@ -6,7 +6,7 @@ import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.bean.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,34 +22,59 @@ public class RedmineService {
         this.apiAccessKey = apiAccessKey;
     }
 
-    public List<Issue> getIssues(String projectKey) throws RedmineException {
+    public List<Issue> getIssues(String projectKey) {
         Integer queryId = null; // any
         RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
-        List<Issue> issues = mgr.getIssueManager().getIssues(projectKey, queryId);
+        List<Issue> issues = null;
+        try {
+            issues = mgr.getIssueManager().getIssues(projectKey, queryId);
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
         return issues;
     }
 
-    public List<Project> getProjects() throws RedmineException {
+    public List<Project> getProjects() {
         RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
-        return mgr.getProjectManager().getProjects();
+        try {
+            return mgr.getProjectManager().getProjects();
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
-    public List<User> getUsers() throws RedmineException {
+    public List<User> getUsers() {
         RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
-        return mgr.getUserManager().getUsers();
+        try {
+            return mgr.getUserManager().getUsers();
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
-    public List<User> getUsersByProject(Integer idProject) throws RedmineException {
+    public List<User> getUsersByProject(Integer idProject) {
         RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
-        List<Membership> members = mgr.getMembershipManager().getMemberships(idProject);
+        List<Membership> members = null;
+        try {
+            members = mgr.getMembershipManager().getMemberships(idProject);
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
         List<User> users = new ArrayList<>();
         members.stream().forEach(m -> users.add(m.getUser()));
         return users;
     }
 
-    public List<Tracker> getTrackers(Integer idProject) throws RedmineException {
+    public List<Tracker> getTrackers(Integer idProject) {
         RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
-        return new ArrayList<>(mgr.getProjectManager().getProjectById(idProject).getTrackers());
+        try {
+            return new ArrayList<>(mgr.getProjectManager().getProjectById(idProject).getTrackers());
+        } catch (RedmineException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
 
     public static class BuilderRedmineService {
@@ -57,17 +82,17 @@ public class RedmineService {
         private String uri;
         private String apiAccessKey;
 
-        public BuilderRedmineService withURI(String uri){
+        public BuilderRedmineService withURI(String uri) {
             this.uri = uri;
             return this;
         }
 
-        public BuilderRedmineService withApiAccessKey(String apiAccessKey){
+        public BuilderRedmineService withApiAccessKey(String apiAccessKey) {
             this.apiAccessKey = apiAccessKey;
             return this;
         }
 
-        public RedmineService build(){
+        public RedmineService build() {
             return new RedmineService(uri, apiAccessKey);
         }
 

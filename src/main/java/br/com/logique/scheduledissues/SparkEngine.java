@@ -2,8 +2,8 @@ package br.com.logique.scheduledissues; /**
  * Created by Gustavo on 10/04/2016.
  */
 
+import br.com.logique.scheduledissues.model.service.IssueService;
 import br.com.logique.scheduledissues.model.service.RedmineService;
-import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
@@ -13,10 +13,13 @@ import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static br.com.logique.scheduledissues.util.JsonUtil.dataToJson;
 import static spark.Spark.get;
+import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
 public class SparkEngine {
@@ -31,13 +34,12 @@ public class SparkEngine {
         routeUsersByProject();
         routeTrackersByProject();
         routeProjects();
+        routeIssues();
     }
 
     private void routeIndex(FreeMarkerEngine freeMarkerEngine) {
         get("/", (request, response) -> {
-            RedmineService redmineService = getRedmineService();
             Map<String, Object> attributes = new HashMap<>();
-            attributes.put("projects", tryGetProjects(redmineService));
             return new ModelAndView(attributes, "issue-form.ftl");
         }, freeMarkerEngine);
     }
@@ -45,7 +47,7 @@ public class SparkEngine {
     private void routeProjects() {
         get("projects/", (request, response) -> {
             RedmineService redmineService = getRedmineService();
-            List<Project> projects = tryGetProjects(redmineService);
+            List<Project> projects = redmineService.getProjects();
             return dataToJson(projects);
         });
     }
@@ -54,7 +56,7 @@ public class SparkEngine {
         get("projects/:id/users/", (request, response) -> {
             String id = request.params(":id");
             RedmineService redmineService = getRedmineService();
-            List<User> users = tryGetUsersByProject(id, redmineService);
+            List<User> users = redmineService.getUsersByProject(Integer.valueOf(id));
             return dataToJson(users);
         });
     }
@@ -63,45 +65,26 @@ public class SparkEngine {
         get("projects/:id/trackers/", (request, response) -> {
             String id = request.params(":id");
             RedmineService redmineService = getRedmineService();
-            List<Tracker> trackers = tryGetTrackersByProject(id, redmineService);
+            List<Tracker> trackers = redmineService.getTrackers(Integer.valueOf(id));
             return dataToJson(trackers);
         });
     }
 
-    private List<Tracker> tryGetTrackersByProject(String id, RedmineService redmineService)  {
-        try {
-            return redmineService.getTrackers(Integer.valueOf(id));
-        } catch (RedmineException e) {
-            e.printStackTrace();
-        }
-        return Collections.EMPTY_LIST;
+    private void routeIssues() {
+        get("issues/", (request, response) -> {
+            IssueService issueService = new IssueService();
+            return dataToJson(issueService.todos());
+        });
     }
 
-    private List<User> tryGetUsersByProject(String id, RedmineService redmineService)  {
-        try {
-            return redmineService.getUsersByProject(Integer.valueOf(id));
-        } catch (RedmineException e) {
-            e.printStackTrace();
-        }
-        return Collections.EMPTY_LIST;
-    }
+    private void routeSaveIssues() {
+        post("issues/", (request, response) -> {
+    //        IssueService issueService = new IssueService();
+      //      request.params(":issue-period");
+//            issueService.save();
+            return "";
+        });
 
-    private List<Project> tryGetProjects(RedmineService redmineService){
-        try {
-            return redmineService.getProjects();
-        } catch (RedmineException e) {
-            e.printStackTrace();
-        }
-        return Collections.EMPTY_LIST;
-    }
-
-    private List<User> tryGetUsers(RedmineService redmineService){
-        try {
-            return redmineService.getUsers();
-        } catch (RedmineException e) {
-            e.printStackTrace();
-        }
-        return Collections.EMPTY_LIST;
     }
 
     private RedmineService getRedmineService() {
