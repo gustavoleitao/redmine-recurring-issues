@@ -13,6 +13,6 @@ public interface Dao<T> {
 
     T findByID(int id);
 
-    void remove(T entity);
+    boolean remove(T entity);
 
 }

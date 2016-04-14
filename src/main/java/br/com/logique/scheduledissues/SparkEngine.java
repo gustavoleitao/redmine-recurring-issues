@@ -2,6 +2,7 @@ package br.com.logique.scheduledissues; /**
  * Created by Gustavo on 10/04/2016.
  */
 
+import br.com.logique.scheduledissues.model.domain.ResponseError;
 import br.com.logique.scheduledissues.model.service.IssueService;
 import br.com.logique.scheduledissues.model.service.RedmineService;
 import com.taskadapter.redmineapi.bean.Project;
@@ -9,6 +10,8 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
+import org.eclipse.jetty.util.MultiMap;
+import org.eclipse.jetty.util.UrlEncoded;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -18,9 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static br.com.logique.scheduledissues.util.JsonUtil.dataToJson;
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.staticFileLocation;
+import static spark.Spark.*;
 
 public class SparkEngine {
 
@@ -30,11 +31,14 @@ public class SparkEngine {
         freeMarkerConfiguration.setTemplateLoader(new ClassTemplateLoader(SparkEngine.class, "/templates"));
         freeMarkerEngine.setConfiguration(freeMarkerConfiguration);
         staticFileLocation("/");
+
         routeIndex(freeMarkerEngine);
         routeUsersByProject();
         routeTrackersByProject();
         routeProjects();
         routeIssues();
+        routeRemoveIssue();
+        routeSaveIssues();
     }
 
     private void routeIndex(FreeMarkerEngine freeMarkerEngine) {
@@ -77,14 +81,29 @@ public class SparkEngine {
         });
     }
 
+    private void routeRemoveIssue() {
+        delete("issues/:id", (request, response) -> {
+            String idStr = request.params(":id");
+            int id = Integer.parseInt(request.params(":id"));
+            IssueService issueService = new IssueService();
+            if (!issueService.remove(id)){
+                response.status(400);
+                return new ResponseError("No issue with id '%s' found", idStr);
+            }
+            return dataToJson(issueService.remove(id));
+        });
+    }
+
     private void routeSaveIssues() {
         post("issues/", (request, response) -> {
-    //        IssueService issueService = new IssueService();
-      //      request.params(":issue-period");
-//            issueService.save();
+            IssueService issueService = new IssueService();
+
+            MultiMap<String> params = new MultiMap<String>();
+            UrlEncoded.decodeTo(request.body(), params, "UTF-8");
+
+
             return "";
         });
-
     }
 
     private RedmineService getRedmineService() {

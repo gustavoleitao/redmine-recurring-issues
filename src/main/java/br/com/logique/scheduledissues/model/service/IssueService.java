@@ -21,4 +21,10 @@ public class IssueService {
         return issuesDaoDao.all();
     }
 
+    public boolean remove(int id){
+        ScheduledIssue issue = new ScheduledIssue();
+        issue.setId(id);
+        return issuesDaoDao.remove(issue);
+    }
+
 }

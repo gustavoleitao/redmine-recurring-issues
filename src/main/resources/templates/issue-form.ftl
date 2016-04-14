@@ -1,7 +1,7 @@
 <#import "layout.ftl" as layout />
 <@layout.layout>
 
-<div id="content" ng-app="issues" ng-controller="issueController" ng-init="updateProjects()">
+<div id="content" ng-app="issues" ng-controller="issueController" ng-init="updateProjects();updateScheduledIssues();">
 
     <div>
         <table class="table table-striped table-condensed">
@@ -11,6 +11,7 @@
                 <th>Titulo</th>
                 <th>Tipo</th>
                 <th>Atribuido para</th>
+                <th>AÃ§Ãµes</th>
             </tr>
             <tr ng-repeat="issue in scheduledIssues">
                 <td>{{ issue.period }}</td>
@@ -18,9 +19,15 @@
                 <td>{{ issue.title }}</td>
                 <td>{{ issue.tracker.name }}</td>
                 <td>{{ issue.user.name }}</td>
+                <td><a href="#" ng-click="removeIssue(issue)">Remover</a> | <a href="#" ng-click="updateIssue(issue)">Alterar</a>
+                </td>
             </tr>
         </table>
     </div>
+
+    <pre>
+        <div>{{scheduledIssues}}</div>
+    </pre>
 
     <form>
 
@@ -40,26 +47,26 @@
             <option></option>
         </select>
 
-        <label for="issue-titulo" class="small">Título da tarefa</label>
+        <label for="issue-titulo" class="small">TÃ­tulo da tarefa</label>
         <input id="issue-titulo" type="text" class="form-control">
 
         <label for="issue-assigned" class="small">Atribuir para</label>
         <select class="form-control" id="issue-assigned" ng-model="userAssignedSelected"
-                ng-options="user.fullName for user in user">
+                ng-options="user.fullName for user in users">
             <opction></opction>
         </select>
 
         <label for="issue-watchers" class="small">Observadores</label>
         <select multiple class="form-control" id="issue-watchers" ng-model="watchesSelected"
-                ng-options="user.fullName for user in user">
+                ng-options="user.fullName for user in users">
         </select>
 
-        <label for="issue-desc" class="small">Descrição</label>
+        <label for="issue-desc" class="small">DescriÃ§Ã£o</label>
         <textarea class="form-control" rows="5" id="issue-desc"></textarea>
 
         <div style="float: right;">
             <br/>
-            <button type="submit" class="btn btn-primary right">Salvar</button>
+            <button type="submit" class="btn btn-primary right" ng-click="addIssue()">Salvar</button>
             <br/>
         </div>
 

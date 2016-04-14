@@ -5,6 +5,14 @@ package br.com.logique.scheduledissues.model.domain;
  */
 public class Tracker {
 
+    public Tracker() {
+    }
+
+    public Tracker(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     private int id;
 
     private String name;

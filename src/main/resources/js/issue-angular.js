@@ -3,37 +3,23 @@
  */
 var myApp = angular.module("issues", []);
 
+myApp.factory("Issue", function () {
+    return function (id, period, title, projectId, trackerId, assignedId, watchers, description) {
+        return {
+            id: id,
+            period: period,
+            title: title,
+            projectId: projectId,
+            assignedId: assignedId,
+            watchersIds: watchers,
+            description: description
+        }
+    }
+})
+
 myApp.controller("issueController", function ($scope, $http) {
 
-    $scope.scheduledIssues = [
-        {
-            period: "* * * * ",
-            project: {id: 0, name: "Projeto"},
-            title: "Title",
-            tracker: {id: 1, name: "Tracker"},
-            user: {id: 2, name: "Fulano"},
-            watchers: [{id: 2, name: "Fulano"}, {id: 3, name: "Cicrano"}],
-            description: "desc"
-        },
-        {
-            period: "* * * * ",
-            project: {id: 0, name: "Projeto"},
-            title: "Title",
-            tracker: {id: 1, name: "Tracker2"},
-            user: {id: 2, name: "Fulano"},
-            watchers: [{id: 2, name: "Fulano"}, {id: 3, name: "Cicrano"}],
-            description: "desc"
-        },
-        {
-            period: "* * * * ",
-            project: {id: 0, name: "Projeto"},
-            title: "Title",
-            tracker: {id: 1, name: "Tracker3"},
-            user: {id: 2, name: "Fulano"},
-            watchers: [{id: 2, name: "Fulano"}, {id: 3, name: "Cicrano"}],
-            description: "desc"
-        }
-    ];
+    $scope.scheduledIssues = [];
 
     $scope.projectSelected = null;
 
@@ -48,6 +34,12 @@ myApp.controller("issueController", function ($scope, $http) {
     $scope.users = [];
 
     $scope.trackers = [];
+
+    $scope.updateScheduledIssues = function () {
+        $http.get('/issues/').then(function (data) {
+            $scope.scheduledIssues = data.data;
+        });
+    }
 
     $scope.updateProjects = function () {
         $http.get('/projects/').then(function (data) {
@@ -78,6 +70,18 @@ myApp.controller("issueController", function ($scope, $http) {
     $scope.updateUsersAndTrackers = function () {
         $scope.updateUsers();
         $scope.updateTrackers();
+    }
+
+    $scope.removeIssue = function (issue) {
+        $http.delete('issues/' + issue.id).success(function (data, status) {
+            $scope.updateScheduledIssues();
+        });
+    }
+
+    $scope.addIssue = function (issue) {
+        $http.post('issues/', issue).success(function (data, status) {
+            $scope.updateScheduledIssues();
+        });
     }
 
 });
