@@ -3,15 +3,15 @@ package br.com.logique.scheduledissues.model.domain;
 /**
  * Created by gustavo on 14/04/2016.
  */
-public class ResponseError {
+public class ResponseMsg {
 
     private String message;
 
-    public ResponseError(String message, String... args) {
+    public ResponseMsg(String message, String... args) {
         this.message = String.format(message, args);
     }
 
-    public ResponseError(Exception e) {
+    public ResponseMsg(Exception e) {
         this.message = e.getMessage();
     }
 

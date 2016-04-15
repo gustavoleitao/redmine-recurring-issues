@@ -11,62 +11,60 @@
                 <th>Titulo</th>
                 <th>Tipo</th>
                 <th>Atribuido para</th>
-                <th>AÃ§Ãµes</th>
+                <th>Ações</th>
             </tr>
-            <tr ng-repeat="issue in scheduledIssues">
-                <td>{{ issue.period }}</td>
-                <td>{{ issue.project.name }}</td>
-                <td>{{ issue.title }}</td>
-                <td>{{ issue.tracker.name }}</td>
-                <td>{{ issue.user.name }}</td>
-                <td><a href="#" ng-click="removeIssue(issue)">Remover</a> | <a href="#" ng-click="updateIssue(issue)">Alterar</a>
+            <tr ng-repeat="scheduledIssue in scheduledIssues">
+                <td>{{ scheduledIssue.period }}</td>
+                <td>{{ scheduledIssue.project.name }}</td>
+                <td>{{ scheduledIssue.title }}</td>
+                <td>{{ scheduledIssue.tracker.name }}</td>
+                <td>{{ scheduledIssue.userAssigned.fullName }}</td>
+                <td><a href="#" ng-click="removeIssue(scheduledIssue)">Remover</a> | <a href="#" ng-click="editIssue(scheduledIssue)">Alterar</a>
                 </td>
             </tr>
         </table>
     </div>
 
-    <pre>
-        <div>{{scheduledIssues}}</div>
-    </pre>
-
     <form>
 
+        <input type="hidden" id="issue-id" ng-model="issue.period.id">
+
         <label for="issue-period" class="small">Periodicidade</label>
-        <input id="issue-period" type="text" class="form-control">
+        <input id="issue-period" type="text" class="form-control" ng-model="issue.period">
 
         <label for="issue-project" class="small">Projeto</label>
-        <select class="form-control" id="issue-project" ng-model="projectSelected"
-                ng-options="project.name for project in projects"
+        <select class="form-control" id="issue-project" ng-model="issue.project"
+                ng-options="project.name for project in projects track by project.id"
                 ng-change="updateUsersAndTrackers()">
             <option></option>
         </select>
 
         <label for="issue-type" class="small">Tipo da tarefa</label>
-        <select class="form-control" id="issue-trackers" ng-model="trackerSelected"
-                ng-options="tracker.name for tracker in trackers">
+        <select class="form-control" id="issue-trackers" ng-model="issue.tracker"
+                ng-options="tracker.name for tracker in trackers track by tracker.id">
             <option></option>
         </select>
 
-        <label for="issue-titulo" class="small">TÃ­tulo da tarefa</label>
-        <input id="issue-titulo" type="text" class="form-control">
+        <label for="issue-titulo" class="small">Título da tarefa</label>
+        <input id="issue-titulo" type="text" class="form-control" ng-model="issue.title">
 
         <label for="issue-assigned" class="small">Atribuir para</label>
-        <select class="form-control" id="issue-assigned" ng-model="userAssignedSelected"
-                ng-options="user.fullName for user in users">
+        <select class="form-control" id="issue-assigned" ng-model="issue.userAssigned"
+                ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
             <opction></opction>
         </select>
 
         <label for="issue-watchers" class="small">Observadores</label>
-        <select multiple class="form-control" id="issue-watchers" ng-model="watchesSelected"
-                ng-options="user.fullName for user in users">
+        <select multiple class="form-control" id="issue-watchers" ng-model="issue.watchers"
+                ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
         </select>
 
-        <label for="issue-desc" class="small">DescriÃ§Ã£o</label>
-        <textarea class="form-control" rows="5" id="issue-desc"></textarea>
+        <label for="issue-desc" class="small">Descrição</label>
+        <textarea class="form-control" rows="5" id="issue-desc" ng-model="issue.description"></textarea>
 
         <div style="float: right;">
             <br/>
-            <button type="submit" class="btn btn-primary right" ng-click="addIssue()">Salvar</button>
+            <button type="submit" class="btn btn-primary right" ng-click="addIssue(issue)">Salvar</button>
             <br/>
         </div>
 

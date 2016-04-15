@@ -2,16 +2,16 @@ package br.com.logique.scheduledissues; /**
  * Created by Gustavo on 10/04/2016.
  */
 
-import br.com.logique.scheduledissues.model.domain.ResponseError;
+import br.com.logique.scheduledissues.model.domain.ResponseMsg;
+import br.com.logique.scheduledissues.model.domain.ScheduledIssue;
 import br.com.logique.scheduledissues.model.service.IssueService;
 import br.com.logique.scheduledissues.model.service.RedmineService;
+import br.com.logique.scheduledissues.util.JsonUtil;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
-import org.eclipse.jetty.util.MultiMap;
-import org.eclipse.jetty.util.UrlEncoded;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -86,9 +86,9 @@ public class SparkEngine {
             String idStr = request.params(":id");
             int id = Integer.parseInt(request.params(":id"));
             IssueService issueService = new IssueService();
-            if (!issueService.remove(id)){
+            if (!issueService.remove(id)) {
                 response.status(400);
-                return new ResponseError("No issue with id '%s' found", idStr);
+                return new ResponseMsg("No issue with id '%s' found", idStr);
             }
             return dataToJson(issueService.remove(id));
         });
@@ -97,12 +97,13 @@ public class SparkEngine {
     private void routeSaveIssues() {
         post("issues/", (request, response) -> {
             IssueService issueService = new IssueService();
-
-            MultiMap<String> params = new MultiMap<String>();
-            UrlEncoded.decodeTo(request.body(), params, "UTF-8");
-
-
-            return "";
+            ScheduledIssue scheduledIssue = JsonUtil.jsonToData(request.body(), ScheduledIssue.class);
+            if (scheduledIssue.getId() == null) {
+                issueService.save(scheduledIssue);
+            } else {
+                issueService.merge(scheduledIssue);
+            }
+            return new ResponseMsg("Success to add issue");
         });
     }
 

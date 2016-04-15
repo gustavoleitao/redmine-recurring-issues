@@ -1,5 +1,7 @@
 package br.com.logique.scheduledissues.model.dao;
 
+import br.com.logique.scheduledissues.model.domain.ScheduledIssue;
+
 import java.util.Collection;
 
 /**
@@ -15,4 +17,5 @@ public interface Dao<T> {
 
     boolean remove(T entity);
 
+    void merge(T entity);
 }

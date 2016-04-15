@@ -23,4 +23,15 @@ public class JsonUtil {
         }
     }
 
+
+    public static <E> E jsonToData(String json, Class<E> clazz){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return  mapper.readValue(json, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("IOException from a StringWriter?");
+        }
+
+    }
+
 }

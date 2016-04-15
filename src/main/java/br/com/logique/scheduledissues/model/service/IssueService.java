@@ -17,6 +17,10 @@ public class IssueService {
         issuesDaoDao.save(issue);
     }
 
+    public void merge(ScheduledIssue issue){
+        issuesDaoDao.merge(issue);
+    }
+
     public Collection<ScheduledIssue> todos(){
         return issuesDaoDao.all();
     }

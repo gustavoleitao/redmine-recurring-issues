@@ -1,8 +1,11 @@
 package br.com.logique.scheduledissues.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by Gustavo on 14/04/2016.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tracker {
 
     public Tracker() {

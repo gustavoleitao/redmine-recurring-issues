@@ -1,13 +1,16 @@
 package br.com.logique.scheduledissues.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
  * Created by Gustavo on 14/04/2016.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ScheduledIssue {
 
-    private int id;
+    private Integer id;
 
     private String period;
 
@@ -17,7 +20,7 @@ public class ScheduledIssue {
 
     private Tracker tracker;
 
-    private User user;
+    private User userAssigned;
 
     private List<User> watchers;
 
@@ -31,11 +34,11 @@ public class ScheduledIssue {
         this.title = title;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -63,12 +66,12 @@ public class ScheduledIssue {
         this.tracker = tracker;
     }
 
-    public User getUser() {
-        return user;
+    public User getUserAssigned() {
+        return userAssigned;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserAssigned(User userAssigned) {
+        this.userAssigned = userAssigned;
     }
 
     public List<User> getWatchers() {
