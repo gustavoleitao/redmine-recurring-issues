@@ -64,6 +64,7 @@
 
         <div style="float: right;">
             <br/>
+            <button type="submit" class="btn btn-primary right" ng-click="clearIssue()">Limpar</button>
             <button type="submit" class="btn btn-primary right" ng-click="addIssue(issue)">Salvar</button>
             <br/>
         </div>

@@ -61,13 +61,19 @@ myApp.controller("issueController", function ($scope, $http, redmineService, iss
     $scope.addIssue = function (issue) {
         issueService.add(issue, function (data) {
             $scope.updateScheduledIssues();
-            $scope.issue = new Issue();
+            $scope.clearIssue();
         });
     };
 
     $scope.editIssue = function (issue) {
         $scope.issue = clone(issue);
     };
+
+    $scope.clearIssue = function(){
+        $scope.issue = new Issue();
+        $scope.users = [];
+        $scope.trackers = [];
+    }
 
     function clone(obj) {
         if (null == obj || "object" != typeof obj) return obj;

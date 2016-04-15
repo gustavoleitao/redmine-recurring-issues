@@ -2,8 +2,12 @@ package br.com.logique.scheduledissues.model.service;
 
 import br.com.logique.scheduledissues.model.dao.Dao;
 import br.com.logique.scheduledissues.model.dao.ScheduledIssuesDao;
-import br.com.logique.scheduledissues.model.domain.ScheduledIssue;
+import br.com.logique.scheduledissues.model.domain.ScheduledIssueEntity;
+import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
+import br.com.logique.scheduledissues.util.ScheduledDtoToEntity;
+import br.com.logique.scheduledissues.util.ScheduledEntityToDto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -11,24 +15,29 @@ import java.util.Collection;
  */
 public class IssueService {
 
-    private Dao<ScheduledIssue> issuesDaoDao = new ScheduledIssuesDao();
+    private ScheduledEntityToDto scheduledEntityToDto = new ScheduledEntityToDto();
+    private ScheduledDtoToEntity scheduledDtoToEntity = new ScheduledDtoToEntity();
+
+    private Dao<ScheduledIssueEntity> issuesDaoDao = new ScheduledIssuesDao();
 
     public void save(ScheduledIssue issue){
-        issuesDaoDao.save(issue);
+        issuesDaoDao.save(scheduledDtoToEntity.apply(issue));
     }
 
     public void merge(ScheduledIssue issue){
-        issuesDaoDao.merge(issue);
+        issuesDaoDao.merge(scheduledDtoToEntity.apply(issue));
     }
 
     public Collection<ScheduledIssue> todos(){
-        return issuesDaoDao.all();
+        Collection<ScheduledIssue> scheduledIssues = new ArrayList<>();
+        issuesDaoDao.all().stream().forEach(v -> scheduledIssues.add(scheduledEntityToDto.apply(v)));
+        return scheduledIssues;
     }
 
     public boolean remove(int id){
         ScheduledIssue issue = new ScheduledIssue();
         issue.setId(id);
-        return issuesDaoDao.remove(issue);
+        return issuesDaoDao.remove(scheduledDtoToEntity.apply(issue));
     }
 
 }

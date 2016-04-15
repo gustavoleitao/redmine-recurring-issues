@@ -3,7 +3,7 @@ package br.com.logique.scheduledissues; /**
  */
 
 import br.com.logique.scheduledissues.model.domain.ResponseMsg;
-import br.com.logique.scheduledissues.model.domain.ScheduledIssue;
+import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
 import br.com.logique.scheduledissues.model.service.IssueService;
 import br.com.logique.scheduledissues.model.service.RedmineService;
 import br.com.logique.scheduledissues.util.JsonUtil;

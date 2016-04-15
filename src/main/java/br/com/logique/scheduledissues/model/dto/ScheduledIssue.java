@@ -1,5 +1,8 @@
-package br.com.logique.scheduledissues.model.domain;
+package br.com.logique.scheduledissues.model.dto;
 
+import br.com.logique.scheduledissues.model.domain.Project;
+import br.com.logique.scheduledissues.model.domain.Tracker;
+import br.com.logique.scheduledissues.model.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
