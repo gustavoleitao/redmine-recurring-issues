@@ -11,7 +11,7 @@
                 <th>Titulo</th>
                 <th>Tipo</th>
                 <th>Atribuido para</th>
-                <th>Ações</th>
+                <th>AÃ§Ãµes</th>
             </tr>
             <tr ng-repeat="scheduledIssue in scheduledIssues">
                 <td>{{ scheduledIssue.period }}</td>
@@ -45,7 +45,7 @@
             <option></option>
         </select>
 
-        <label for="issue-titulo" class="small">Título da tarefa</label>
+        <label for="issue-titulo" class="small">TÃ­tulo da tarefa</label>
         <input id="issue-titulo" type="text" class="form-control" ng-model="issue.title">
 
         <label for="issue-assigned" class="small">Atribuir para</label>
@@ -59,7 +59,7 @@
                 ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
         </select>
 
-        <label for="issue-desc" class="small">Descrição</label>
+        <label for="issue-desc" class="small">DescriÃ§Ã£o</label>
         <textarea class="form-control" rows="5" id="issue-desc" ng-model="issue.description"></textarea>
 
         <div style="float: right;">

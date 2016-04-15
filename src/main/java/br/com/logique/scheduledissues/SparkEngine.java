@@ -28,6 +28,7 @@ public class SparkEngine {
     public void setUp() throws IOException {
         FreeMarkerEngine freeMarkerEngine = new FreeMarkerEngine();
         Configuration freeMarkerConfiguration = new Configuration(Configuration.getVersion());
+        freeMarkerConfiguration.setOutputEncoding("UTF-8");
         freeMarkerConfiguration.setTemplateLoader(new ClassTemplateLoader(SparkEngine.class, "/templates"));
         freeMarkerEngine.setConfiguration(freeMarkerConfiguration);
         staticFileLocation("/");
