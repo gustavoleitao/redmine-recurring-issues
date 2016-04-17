@@ -1,13 +1,22 @@
 package br.com.logique.scheduledissues.model.domain;
 
+import br.com.logique.scheduledissues.model.dao.GenericEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
 
 /**
  * Created by gustavo on 15/04/2016.
  */
-public class ScheduledIssueEntity {
+@Entity
+public class ScheduledIssueEntity extends GenericEntity {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String period;
 
@@ -23,11 +32,11 @@ public class ScheduledIssueEntity {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

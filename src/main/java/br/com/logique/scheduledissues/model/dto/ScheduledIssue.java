@@ -1,8 +1,8 @@
 package br.com.logique.scheduledissues.model.dto;
 
-import br.com.logique.scheduledissues.model.domain.Project;
-import br.com.logique.scheduledissues.model.domain.Tracker;
-import br.com.logique.scheduledissues.model.domain.User;
+import br.com.logique.scheduledissues.model.domain.ProjectBasic;
+import br.com.logique.scheduledissues.model.domain.TrackerBasic;
+import br.com.logique.scheduledissues.model.domain.UserBasic;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -13,19 +13,19 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ScheduledIssue {
 
-    private Integer id;
+    private Long id;
 
     private String period;
 
     private String title;
 
-    private Project project;
+    private ProjectBasic project;
 
-    private Tracker tracker;
+    private TrackerBasic tracker;
 
-    private User userAssigned;
+    private UserBasic userAssigned;
 
-    private List<User> watchers;
+    private List<UserBasic> watchers;
 
     private String description;
 
@@ -37,11 +37,11 @@ public class ScheduledIssue {
         this.title = title;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,35 +53,35 @@ public class ScheduledIssue {
         this.period = period;
     }
 
-    public Project getProject() {
+    public ProjectBasic getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectBasic project) {
         this.project = project;
     }
 
-    public Tracker getTracker() {
+    public TrackerBasic getTracker() {
         return tracker;
     }
 
-    public void setTracker(Tracker tracker) {
+    public void setTracker(TrackerBasic tracker) {
         this.tracker = tracker;
     }
 
-    public User getUserAssigned() {
+    public UserBasic getUserAssigned() {
         return userAssigned;
     }
 
-    public void setUserAssigned(User userAssigned) {
+    public void setUserAssigned(UserBasic userAssigned) {
         this.userAssigned = userAssigned;
     }
 
-    public List<User> getWatchers() {
+    public List<UserBasic> getWatchers() {
         return watchers;
     }
 
-    public void setWatchers(List<User> watchers) {
+    public void setWatchers(List<UserBasic> watchers) {
         this.watchers = watchers;
     }
 

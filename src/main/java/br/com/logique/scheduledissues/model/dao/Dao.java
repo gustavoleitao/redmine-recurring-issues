@@ -11,9 +11,8 @@ public interface Dao<T> {
 
     Collection<T> all();
 
-    T findByID(int id);
+    T findByID(Long id);
 
-    boolean remove(T entity);
+    void remove(T entity);
 
-    void merge(T entity);
 }

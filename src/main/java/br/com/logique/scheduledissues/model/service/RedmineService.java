@@ -77,6 +77,22 @@ public class RedmineService {
         return Collections.emptyList();
     }
 
+    public Project getProjectById(Integer projectId) throws RedmineException {
+        RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
+        return mgr.getProjectManager().getProjectById(projectId);
+    }
+
+    public Tracker getTrackerById(Integer trackerId) throws RedmineException {
+        RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
+        List<Tracker> trackers = mgr.getIssueManager().getTrackers();
+        return trackers.stream().filter(x -> x.getId() == trackerId).findAny().get();
+    }
+
+    public User getUserById(Integer userAssignedId) throws RedmineException {
+        RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
+        return mgr.getUserManager().getUserById(userAssignedId);
+    }
+
     public static class BuilderRedmineService {
 
         private String uri;

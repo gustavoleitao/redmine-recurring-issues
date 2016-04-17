@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Created by Gustavo on 14/04/2016.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Tracker {
+public class TrackerBasic {
 
-    public Tracker() {
+    public TrackerBasic() {
     }
 
-    public Tracker(int id, String name) {
+    public TrackerBasic(int id, String name) {
         this.id = id;
         this.name = name;
     }

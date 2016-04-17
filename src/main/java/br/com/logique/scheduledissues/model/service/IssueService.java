@@ -20,24 +20,20 @@ public class IssueService {
 
     private Dao<ScheduledIssueEntity> issuesDaoDao = new ScheduledIssuesDao();
 
-    public void save(ScheduledIssue issue){
+    public void save(ScheduledIssue issue) {
         issuesDaoDao.save(scheduledDtoToEntity.apply(issue));
     }
 
-    public void merge(ScheduledIssue issue){
-        issuesDaoDao.merge(scheduledDtoToEntity.apply(issue));
-    }
-
-    public Collection<ScheduledIssue> todos(){
+    public Collection<ScheduledIssue> todos() {
         Collection<ScheduledIssue> scheduledIssues = new ArrayList<>();
         issuesDaoDao.all().stream().forEach(v -> scheduledIssues.add(scheduledEntityToDto.apply(v)));
         return scheduledIssues;
     }
 
-    public boolean remove(int id){
+    public void remove(Long id) {
         ScheduledIssue issue = new ScheduledIssue();
         issue.setId(id);
-        return issuesDaoDao.remove(scheduledDtoToEntity.apply(issue));
+        issuesDaoDao.remove(scheduledDtoToEntity.apply(issue));
     }
 
 }

@@ -6,6 +6,7 @@ import br.com.logique.scheduledissues.model.domain.ResponseMsg;
 import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
 import br.com.logique.scheduledissues.model.service.IssueService;
 import br.com.logique.scheduledissues.model.service.RedmineService;
+import br.com.logique.scheduledissues.model.service.RedmineServiceFactory;
 import br.com.logique.scheduledissues.util.JsonUtil;
 import com.taskadapter.redmineapi.bean.Project;
 import com.taskadapter.redmineapi.bean.Tracker;
@@ -51,7 +52,7 @@ public class SparkEngine {
 
     private void routeProjects() {
         get("projects/", (request, response) -> {
-            RedmineService redmineService = getRedmineService();
+            RedmineService redmineService = RedmineServiceFactory.createRedmineService();
             List<Project> projects = redmineService.getProjects();
             return dataToJson(projects);
         });
@@ -60,7 +61,7 @@ public class SparkEngine {
     private void routeUsersByProject() {
         get("projects/:id/users/", (request, response) -> {
             String id = request.params(":id");
-            RedmineService redmineService = getRedmineService();
+            RedmineService redmineService = RedmineServiceFactory.createRedmineService();
             List<User> users = redmineService.getUsersByProject(Integer.valueOf(id));
             return dataToJson(users);
         });
@@ -69,7 +70,7 @@ public class SparkEngine {
     private void routeTrackersByProject() {
         get("projects/:id/trackers/", (request, response) -> {
             String id = request.params(":id");
-            RedmineService redmineService = getRedmineService();
+            RedmineService redmineService = RedmineServiceFactory.createRedmineService();
             List<Tracker> trackers = redmineService.getTrackers(Integer.valueOf(id));
             return dataToJson(trackers);
         });
@@ -85,13 +86,15 @@ public class SparkEngine {
     private void routeRemoveIssue() {
         delete("issues/:id", (request, response) -> {
             String idStr = request.params(":id");
-            int id = Integer.parseInt(request.params(":id"));
+            Long id = Long.parseLong(request.params(":id"));
             IssueService issueService = new IssueService();
-            if (!issueService.remove(id)) {
+            try{
+                issueService.remove(id);
+                return new ResponseMsg("Issue with id '%s' removed", idStr);
+            }catch (Exception e){
                 response.status(400);
                 return new ResponseMsg("No issue with id '%s' found", idStr);
             }
-            return dataToJson(issueService.remove(id));
         });
     }
 
@@ -99,20 +102,9 @@ public class SparkEngine {
         post("issues/", (request, response) -> {
             IssueService issueService = new IssueService();
             ScheduledIssue scheduledIssue = JsonUtil.jsonToData(request.body(), ScheduledIssue.class);
-            if (scheduledIssue.getId() == null) {
-                issueService.save(scheduledIssue);
-            } else {
-                issueService.merge(scheduledIssue);
-            }
+            issueService.save(scheduledIssue);
             return new ResponseMsg("Success to add issue");
         });
-    }
-
-    private RedmineService getRedmineService() {
-        return new RedmineService.BuilderRedmineService()
-                .withApiAccessKey("029b49eaa97e110f0ce5d8149cb4d622365eba58")
-                .withURI("http://209.208.90.122/redmine")
-                .build();
     }
 
 }

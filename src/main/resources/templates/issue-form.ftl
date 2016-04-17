@@ -25,6 +25,8 @@
         </table>
     </div>
 
+    <pre>{{scheduledIssues | json}}</pre>
+
     <form>
 
         <input type="hidden" id="issue-id" ng-model="issue.period.id">
