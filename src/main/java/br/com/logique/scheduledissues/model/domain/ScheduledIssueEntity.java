@@ -2,10 +2,7 @@ package br.com.logique.scheduledissues.model.domain;
 
 import br.com.logique.scheduledissues.model.dao.GenericEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -22,16 +19,21 @@ public class ScheduledIssueEntity extends GenericEntity {
 
     private String title;
 
-    private Integer projectId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private ProjectBasic project;
 
-    private Integer trackerId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private TrackerBasic tracker;
 
-    private Integer userAssignedId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private UserBasic userAssigned;
 
-    private List<Integer> watchersId;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<UserBasic> watchers;
 
     private String description;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -56,36 +58,36 @@ public class ScheduledIssueEntity extends GenericEntity {
         this.title = title;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public ProjectBasic getProject() {
+        return project;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setProject(ProjectBasic project) {
+        this.project = project;
     }
 
-    public Integer getTrackerId() {
-        return trackerId;
+    public TrackerBasic getTracker() {
+        return tracker;
     }
 
-    public void setTrackerId(Integer trackerId) {
-        this.trackerId = trackerId;
+    public void setTracker(TrackerBasic tracker) {
+        this.tracker = tracker;
     }
 
-    public Integer getUserAssignedId() {
-        return userAssignedId;
+    public UserBasic getUserAssigned() {
+        return userAssigned;
     }
 
-    public void setUserAssignedId(Integer userAssignedId) {
-        this.userAssignedId = userAssignedId;
+    public void setUserAssigned(UserBasic userAssigned) {
+        this.userAssigned = userAssigned;
     }
 
-    public List<Integer> getWatchersId() {
-        return watchersId;
+    public List<UserBasic> getWatchers() {
+        return watchers;
     }
 
-    public void setWatchersId(List<Integer> watchersId) {
-        this.watchersId = watchersId;
+    public void setWatchers(List<UserBasic> watchers) {
+        this.watchers = watchers;
     }
 
     public String getDescription() {

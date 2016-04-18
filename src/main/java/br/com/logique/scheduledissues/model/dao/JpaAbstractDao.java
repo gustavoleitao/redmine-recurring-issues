@@ -25,12 +25,14 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
     @Override
     public T save(T entidade) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
         try {
             if (entidade.getId() == null) {
                 entityManager.persist(entidade);
             } else {
                 entityManager.merge(entidade);
             }
+            entityManager.getTransaction().commit();
         } finally {
             close(entityManager);
         }
@@ -38,7 +40,12 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
     }
 
     private void close(EntityManager entityManager) {
-        if (entityManager != null && entityManager.isOpen()){
+
+        if (entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().rollback();
+        }
+
+        if (entityManager != null && entityManager.isOpen()) {
             entityManager.close();
         }
     }
@@ -46,9 +53,9 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
     @Override
     public T findByID(Long id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try{
+        try {
             return (T) entityManager.find(clazz, id);
-        }finally {
+        } finally {
             close(entityManager);
         }
     }
@@ -58,10 +65,10 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
     @SuppressWarnings("unchecked")
     public List<T> all() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try{
+        try {
             Query query = entityManager.createQuery("from " + clazz.getName());
             return query.getResultList();
-        }finally {
+        } finally {
             close(entityManager);
         }
     }
@@ -69,9 +76,13 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
     @Override
     public void remove(T entidade) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try{
-            entityManager.remove(entidade);
-        }finally {
+        try {
+            entityManager.getTransaction().begin();
+            if (entidade != null) {
+                entityManager.remove(entityManager.contains(entidade) ? entidade : entityManager.merge(entidade));
+            }
+            entityManager.getTransaction().commit();
+        } finally {
             close(entityManager);
         }
     }

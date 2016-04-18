@@ -5,8 +5,11 @@
              version="2.1">
 
     <persistence-unit name="db" transaction-type="RESOURCE_LOCAL">
-        <!--<class>br.com.logique.bralarmexpert.modelo.dominio.PeriodicidadePreProcessamento</class>-->
-        <!--<exclude-unlisted-classes>true</exclude-unlisted-classes>-->
+
+        <class>br.com.logique.scheduledissues.model.domain.ScheduledIssueEntity</class>
+        <class>br.com.logique.scheduledissues.model.domain.UserBasic</class>
+        <class>br.com.logique.scheduledissues.model.domain.ProjectBasic</class>
+        <class>br.com.logique.scheduledissues.model.domain.TrackerBasic</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
