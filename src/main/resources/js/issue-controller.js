@@ -62,6 +62,7 @@ myApp.controller("issueController", function ($scope, $http, redmineService, iss
         issueService.add(issue, function (data) {
             $scope.updateScheduledIssues();
             $scope.clearIssue();
+            $scope.updateUsersAndTrackers();
         });
     };
 

@@ -19,7 +19,6 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
         Class<T> clazz = inferirTipoGenerico();
         this.clazz = clazz;
         entityManagerFactory = EntityManagerFactoryHolder.INSTANCE;
-
     }
 
     @Override
@@ -39,7 +38,7 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
         return entidade;
     }
 
-    private void close(EntityManager entityManager) {
+    protected void close(EntityManager entityManager) {
 
         if (entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().rollback();
