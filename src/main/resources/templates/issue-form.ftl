@@ -19,59 +19,94 @@
                 <td>{{ scheduledIssue.title }}</td>
                 <td>{{ scheduledIssue.tracker.name }}</td>
                 <td>{{ scheduledIssue.userAssigned.fullName }}</td>
-                <td><a href="#" ng-click="removeIssue(scheduledIssue)">Remover</a> | <a href="#" ng-click="editIssue(scheduledIssue)">Alterar</a>
+                <td><a href="#" ng-click="removeIssue(scheduledIssue)">Remover</a> | <a href="#" data-toggle="modal" data-target="#issueModal" ng-click="editIssue(scheduledIssue)">Alterar</a>
                 </td>
             </tr>
         </table>
     </div>
 
-    <pre>{{scheduledIssues | json}}</pre>
+    <div id="issueModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
-    <form>
+            <!-- Modal content-->
 
-        <input type="hidden" id="issue-id" ng-model="issue.period.id">
+        <#--<div class="modal-header">-->
+        <#--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+        <#--<h4 class="modal-title">Modal Header</h4>-->
+        <#--</div>-->
+        <#--<div class="modal-body">-->
+        <#--<p>Some text in the modal.</p>-->
+        <#--</div>-->
+        <#--<div class="modal-footer">-->
+        <#--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        <#--</div>-->
+        <#--</div>-->
 
-        <label for="issue-period" class="small">Periodicidade</label>
-        <input id="issue-period" type="text" class="form-control" ng-model="issue.period">
+            <div class="modal-content">
 
-        <label for="issue-project" class="small">Projeto</label>
-        <select class="form-control" id="issue-project" ng-model="issue.project"
-                ng-options="project.name for project in projects track by project.id"
-                ng-change="updateUsersAndTrackers()">
-            <option></option>
-        </select>
+                <div class="modal-body">
+                    <form>
 
-        <label for="issue-type" class="small">Tipo da tarefa</label>
-        <select class="form-control" id="issue-trackers" ng-model="issue.tracker"
-                ng-options="tracker.name for tracker in trackers track by tracker.id">
-            <option></option>
-        </select>
+                        <input type="hidden" id="issue-id" ng-model="issue.period.id">
 
-        <label for="issue-titulo" class="small">Título da tarefa</label>
-        <input id="issue-titulo" type="text" class="form-control" ng-model="issue.title">
+                        <label for="issue-period" class="small">Periodicidade</label>
+                        <input id="issue-period" type="text" class="form-control" ng-model="issue.period">
 
-        <label for="issue-assigned" class="small">Atribuir para</label>
-        <select class="form-control" id="issue-assigned" ng-model="issue.userAssigned"
-                ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
-            <opction></opction>
-        </select>
+                        <label for="issue-project" class="small">Projeto</label>
+                        <select class="form-control" id="issue-project" ng-model="issue.project"
+                                ng-options="project.name for project in projects track by project.id"
+                                ng-change="updateUsersAndTrackers()">
+                            <option></option>
+                        </select>
 
-        <label for="issue-watchers" class="small">Observadores</label>
-        <select multiple class="form-control" id="issue-watchers" ng-model="issue.watchers"
-                ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
-        </select>
+                        <label for="issue-type" class="small">Tipo da tarefa</label>
+                        <select class="form-control" id="issue-trackers" ng-model="issue.tracker"
+                                ng-options="tracker.name for tracker in trackers track by tracker.id">
+                            <option></option>
+                        </select>
 
-        <label for="issue-desc" class="small">Descrição</label>
-        <textarea class="form-control" rows="5" id="issue-desc" ng-model="issue.description"></textarea>
+                        <label for="issue-titulo" class="small">Título da tarefa</label>
+                        <input id="issue-titulo" type="text" class="form-control" ng-model="issue.title">
 
-        <div style="float: right;">
-            <br/>
-            <button type="submit" class="btn btn-primary right" ng-click="clearIssue()">Limpar</button>
-            <button type="submit" class="btn btn-primary right" ng-click="addIssue(issue)">Salvar</button>
-            <br/>
+                        <label for="issue-assigned" class="small">Atribuir para</label>
+                        <select class="form-control" id="issue-assigned" ng-model="issue.userAssigned"
+                                ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
+                            <opction></opction>
+                        </select>
+
+                        <label for="issue-watchers" class="small">Observadores</label>
+                        <select multiple class="form-control" id="issue-watchers" ng-model="issue.watchers"
+                                ng-options="userAssigned.fullName for userAssigned in users track by userAssigned.id">
+                        </select>
+
+                        <label for="issue-desc" class="small">Descrição</label>
+                        <textarea class="form-control" rows="5" id="issue-desc" ng-model="issue.description"></textarea>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <div style="float: right;">
+                        <br/>
+                        <button type="submit" class="btn btn-primary right" ng-click="clearIssue()">Limpar</button>
+                        <button type="submit" class="btn btn-primary right" data-dismiss="modal" ng-click="addIssue(issue)">Salvar
+                        </button>
+                        <br/>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
+    </div>
 
-    </form>
 </div>
+
+<div class="pull-right">
+    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#issueModal">Adicionar Tarefa</button>
+</div>
+
+
+<!-- Modal -->
 
 </@layout.layout>

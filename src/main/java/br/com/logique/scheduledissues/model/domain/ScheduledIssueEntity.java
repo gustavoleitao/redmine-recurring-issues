@@ -28,7 +28,11 @@ public class ScheduledIssueEntity extends GenericEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private UserBasic userAssigned;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "scheduler_watcher", joinColumns = {
+            @JoinColumn(name = "scheduler_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "watcher_id",
+                    nullable = false, updatable = false)})
     private List<UserBasic> watchers;
 
     private String description;

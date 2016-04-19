@@ -14,7 +14,6 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
     protected final Class<T> clazz;
     protected final EntityManagerFactoryHolder entityManagerFactory;
 
-
     public JpaAbstractDao() {
         Class<T> clazz = inferirTipoGenerico();
         this.clazz = clazz;
@@ -58,7 +57,6 @@ public abstract class JpaAbstractDao<T extends GenericEntity> implements Dao<T> 
             close(entityManager);
         }
     }
-
 
     @Override
     @SuppressWarnings("unchecked")

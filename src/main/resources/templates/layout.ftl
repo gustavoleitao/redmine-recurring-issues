@@ -1,6 +1,6 @@
 <#macro layout>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,6 +63,7 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="/js/deps/ie10-viewport-bug-workaround.js"></script>
 <script src="/js/deps/jquery-2.2.3.js"></script>
+<script src="/js/deps/bootstrap.min.js"></script>
 
 <#--Angular Dependencies. Don't change order-->
 <script src="/js/issue-controller.js"></script>

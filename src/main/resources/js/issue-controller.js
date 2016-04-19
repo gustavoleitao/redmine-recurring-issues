@@ -68,6 +68,7 @@ myApp.controller("issueController", function ($scope, $http, redmineService, iss
 
     $scope.editIssue = function (issue) {
         $scope.issue = clone(issue);
+        $scope.updateUsersAndTrackers();
     };
 
     $scope.clearIssue = function(){
