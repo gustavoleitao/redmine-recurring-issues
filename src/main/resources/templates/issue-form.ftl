@@ -28,26 +28,15 @@
     <div id="issueModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
-            <!-- Modal content-->
-
-        <#--<div class="modal-header">-->
-        <#--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-        <#--<h4 class="modal-title">Modal Header</h4>-->
-        <#--</div>-->
-        <#--<div class="modal-body">-->
-        <#--<p>Some text in the modal.</p>-->
-        <#--</div>-->
-        <#--<div class="modal-footer">-->
-        <#--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-        <#--</div>-->
-        <#--</div>-->
-
             <div class="modal-content">
 
                 <div class="modal-body">
                     <form>
 
                         <input type="hidden" id="issue-id" ng-model="issue.period.id">
+
+                        <label for="issue-titulo" class="small">Título da tarefa</label>
+                        <input id="issue-titulo" type="text" class="form-control" ng-model="issue.title">
 
                         <label for="issue-period" class="small">Periodicidade</label>
                         <input id="issue-period" type="text" class="form-control" ng-model="issue.period">
@@ -64,9 +53,6 @@
                                 ng-options="tracker.name for tracker in trackers track by tracker.id">
                             <option></option>
                         </select>
-
-                        <label for="issue-titulo" class="small">Título da tarefa</label>
-                        <input id="issue-titulo" type="text" class="form-control" ng-model="issue.title">
 
                         <label for="issue-assigned" class="small">Atribuir para</label>
                         <select class="form-control" id="issue-assigned" ng-model="issue.userAssigned"
