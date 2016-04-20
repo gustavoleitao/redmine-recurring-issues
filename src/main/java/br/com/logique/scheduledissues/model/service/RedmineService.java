@@ -93,6 +93,11 @@ public class RedmineService {
         return mgr.getUserManager().getUserById(userAssignedId);
     }
 
+    public void createIssue(Issue issue) throws RedmineException {
+        RedmineManager mgr = RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
+        mgr.getIssueManager().createIssue(issue);
+    }
+
     public static class BuilderRedmineService {
 
         private String uri;

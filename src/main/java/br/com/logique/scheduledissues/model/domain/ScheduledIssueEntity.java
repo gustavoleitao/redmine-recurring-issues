@@ -1,6 +1,8 @@
 package br.com.logique.scheduledissues.model.domain;
 
 import br.com.logique.scheduledissues.model.dao.GenericEntity;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -100,5 +102,37 @@ public class ScheduledIssueEntity extends GenericEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ScheduledIssueEntity that = (ScheduledIssueEntity) o;
+
+        return new EqualsBuilder()
+                .append(period, that.period)
+                .append(title, that.title)
+                .append(project, that.project)
+                .append(tracker, that.tracker)
+                .append(userAssigned, that.userAssigned)
+                .append(watchers, that.watchers)
+                .append(description, that.description)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(period)
+                .append(title)
+                .append(project)
+                .append(tracker)
+                .append(userAssigned)
+                .append(watchers)
+                .append(description)
+                .toHashCode();
     }
 }
