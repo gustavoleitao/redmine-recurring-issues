@@ -6,6 +6,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -14,9 +16,19 @@ import java.util.List;
  */
 public class SchedulerIssuesJob implements Job {
 
+    private Logger logger = LoggerFactory.getLogger(SchedulerIssuesJob.class);
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("CHAMOU MONITORING");
+        try {
+            monitorinSchedulers();
+        } catch (Throwable e) {
+            logger.error("Intercepted exception. Error to run the monitoring job.", e);
+        }
+    }
+
+    private void monitorinSchedulers() {
+        logger.trace("Monitoring schedulers changes");
         ScheduledIssuesDao scheduledIssuesDao = new ScheduledIssuesDao();
         List<ScheduledIssueEntity> issues = scheduledIssuesDao.all();
 
@@ -25,7 +37,6 @@ public class SchedulerIssuesJob implements Job {
             tryRemoveAllSchedulers(quartzManager);
             quartzManager.scheduleCreateJobs(issues);
         }
-
     }
 
     private boolean isSchedulerChanged(List<ScheduledIssueEntity> issues) {
@@ -47,8 +58,7 @@ public class SchedulerIssuesJob implements Job {
         try {
             quartzManager.removeAllSchedulers();
         } catch (SchedulerException e) {
-            e.printStackTrace();
-            //TODO logar
+            logger.error("Error ro remove all schedulers.", e);
         }
     }
 

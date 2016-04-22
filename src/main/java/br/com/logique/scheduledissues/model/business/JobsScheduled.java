@@ -1,10 +1,11 @@
 package br.com.logique.scheduledissues.model.business;
 
 import br.com.logique.scheduledissues.model.domain.ScheduledIssueEntity;
-import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
 import org.quartz.JobDetail;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -12,28 +13,38 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JobsScheduled {
 
+    private static final JobsScheduled INSTANCE = new JobsScheduled();
     private Map<ScheduledIssueEntity, JobDetail> issueJobDetailMap = new ConcurrentHashMap<>();
 
-    private static final JobsScheduled INSTANCE = new JobsScheduled();
-
-    public void put(ScheduledIssueEntity issue, JobDetail jobDetail){
+    public void put(ScheduledIssueEntity issue, JobDetail jobDetail) {
         issueJobDetailMap.put(issue, jobDetail);
     }
 
-    public JobDetail get(ScheduledIssueEntity issue){
+    public JobDetail get(ScheduledIssueEntity issue) {
         return issueJobDetailMap.get(issue);
     }
 
-    public boolean exists(ScheduledIssueEntity issue){
+    public boolean exists(ScheduledIssueEntity issue) {
         return issueJobDetailMap.containsKey(issue);
     }
 
-    public int size(){
+    public int size() {
         return issueJobDetailMap.size();
     }
 
-
     public void removeAll() {
         issueJobDetailMap.clear();
+    }
+
+    public void remove(ScheduledIssueEntity issueEntity) {
+        issueJobDetailMap.remove(issueEntity);
+    }
+
+    public Set<ScheduledIssueEntity> allIssues() {
+        return issueJobDetailMap.keySet();
+    }
+
+    public Collection<JobDetail> allJobs() {
+        return issueJobDetailMap.values();
     }
 }

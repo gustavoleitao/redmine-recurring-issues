@@ -112,13 +112,23 @@ public class ScheduledIssueEntity extends GenericEntity {
 
         ScheduledIssueEntity that = (ScheduledIssueEntity) o;
 
+        UserBasic[] watchersEq1 = null;
+        UserBasic[] watchersEq2 = null;
+
+        if (watchers != null) {
+            watchersEq1 = watchers.toArray(new UserBasic[watchers.size()]);
+        }
+        if (that.watchers != null) {
+            watchersEq2 = that.watchers.toArray(new UserBasic[that.watchers.size()]);
+        }
+
         return new EqualsBuilder()
                 .append(period, that.period)
                 .append(title, that.title)
                 .append(project, that.project)
                 .append(tracker, that.tracker)
                 .append(userAssigned, that.userAssigned)
-                .append(watchers, that.watchers)
+                .append(watchersEq1, watchersEq2)
                 .append(description, that.description)
                 .isEquals();
     }
@@ -131,7 +141,6 @@ public class ScheduledIssueEntity extends GenericEntity {
                 .append(project)
                 .append(tracker)
                 .append(userAssigned)
-                .append(watchers)
                 .append(description)
                 .toHashCode();
     }
