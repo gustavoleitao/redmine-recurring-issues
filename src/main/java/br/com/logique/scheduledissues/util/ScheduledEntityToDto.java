@@ -2,13 +2,7 @@ package br.com.logique.scheduledissues.util;
 
 import br.com.logique.scheduledissues.model.domain.*;
 import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
-import br.com.logique.scheduledissues.model.service.RedmineService;
-import br.com.logique.scheduledissues.model.service.RedmineServiceFactory;
-import com.taskadapter.redmineapi.RedmineException;
-import com.taskadapter.redmineapi.bean.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -27,6 +21,7 @@ public class ScheduledEntityToDto implements Function<ScheduledIssueEntity, Sche
         scheduledIssue.setTracker(scheduledIssueEntity.getTracker());
         scheduledIssue.setUserAssigned(scheduledIssueEntity.getUserAssigned());
         scheduledIssue.setWatchers(scheduledIssueEntity.getWatchers());
+        scheduledIssue.setDuration(scheduledIssueEntity.getDurationDays());
         return scheduledIssue;
     }
 

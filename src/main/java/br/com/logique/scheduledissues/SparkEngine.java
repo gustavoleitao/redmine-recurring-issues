@@ -3,7 +3,9 @@ package br.com.logique.scheduledissues; /**
  */
 
 import br.com.logique.scheduledissues.model.domain.ResponseMsg;
+import br.com.logique.scheduledissues.model.dto.FieldValidate;
 import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
+import br.com.logique.scheduledissues.model.dto.ValidateResponse;
 import br.com.logique.scheduledissues.model.service.IssueService;
 import br.com.logique.scheduledissues.model.service.RedmineService;
 import br.com.logique.scheduledissues.model.service.RedmineServiceFactory;
@@ -26,14 +28,21 @@ import static spark.Spark.*;
 
 public class SparkEngine {
 
+    private static String port = System.getProperty("app.port", "4567");
+
     public void setUp() throws IOException {
         FreeMarkerEngine freeMarkerEngine = new FreeMarkerEngine();
         Configuration freeMarkerConfiguration = new Configuration(Configuration.getVersion());
         freeMarkerConfiguration.setOutputEncoding("UTF-8");
-        freeMarkerConfiguration.setTemplateLoader(new ClassTemplateLoader(SparkEngine.class, "/templates"));
+        freeMarkerConfiguration.setDefaultEncoding("UTF-8");
+        freeMarkerConfiguration.setTemplateLoader(new ClassTemplateLoader(SparkEngine.class, "/public/templates"));
         freeMarkerEngine.setConfiguration(freeMarkerConfiguration);
-        staticFileLocation("/");
+        staticFileLocation("/public");
+        port(Integer.parseInt(port));
+        routes(freeMarkerEngine);
+    }
 
+    private void routes(FreeMarkerEngine freeMarkerEngine) {
         routeIndex(freeMarkerEngine);
         routeUsersByProject();
         routeTrackersByProject();
@@ -41,6 +50,7 @@ public class SparkEngine {
         routeIssues();
         routeRemoveIssue();
         routeSaveIssues();
+        routeValidateCronExpression();
     }
 
     private void routeIndex(FreeMarkerEngine freeMarkerEngine) {
@@ -88,10 +98,10 @@ public class SparkEngine {
             String idStr = request.params(":id");
             Long id = Long.parseLong(request.params(":id"));
             IssueService issueService = new IssueService();
-            try{
+            try {
                 issueService.remove(id);
                 return new ResponseMsg("Issue with id '%s' removed", idStr);
-            }catch (Exception e){
+            } catch (Exception e) {
                 response.status(400);
                 return new ResponseMsg("No issue with id '%s' found", idStr);
             }
@@ -106,5 +116,15 @@ public class SparkEngine {
             return new ResponseMsg("Success to add issue");
         });
     }
+
+    private void routeValidateCronExpression() {
+        post("issues/cron/validate", (request, response) -> {
+            IssueService issueService = new IssueService();
+            FieldValidate field = JsonUtil.jsonToData(request.body(), FieldValidate.class);
+            boolean isValid = issueService.validateCron(field.getValue());
+            return JsonUtil.dataToJson(ValidateResponse.of(isValid, field.getValue()));
+        });
+    }
+
 
 }

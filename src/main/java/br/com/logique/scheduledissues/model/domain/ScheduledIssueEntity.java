@@ -21,6 +21,8 @@ public class ScheduledIssueEntity extends GenericEntity {
 
     private String title;
 
+    private Integer durationDays;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private ProjectBasic project;
 
@@ -102,6 +104,14 @@ public class ScheduledIssueEntity extends GenericEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getDurationDays() {
+        return durationDays;
+    }
+
+    public void setDurationDays(Integer durationDays) {
+        this.durationDays = durationDays;
     }
 
     @Override

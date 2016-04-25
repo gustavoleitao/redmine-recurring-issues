@@ -29,6 +29,16 @@ public class ScheduledIssue {
 
     private String description;
 
+    private Integer duration;
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     public String getTitle() {
         return title;
     }

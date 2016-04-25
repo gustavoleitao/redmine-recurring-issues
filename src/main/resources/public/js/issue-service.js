@@ -3,7 +3,7 @@
  */
 
 myApp.factory("Issue", function () {
-    return function (id, period, title, project, tracker, userAssigned, watchers, description) {
+    return function (id, period, title, project, tracker, userAssigned, watchers, description, duration) {
         return {
             id: id,
             period: period,
@@ -12,7 +12,8 @@ myApp.factory("Issue", function () {
             userAssigned: userAssigned,
             watchers: watchers,
             description: description,
-            tracker: tracker
+            tracker: tracker,
+            duration: duration
         }
     }
 });

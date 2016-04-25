@@ -18,7 +18,6 @@ public class App {
 
         QuartzManager.getInstance().scheduleMonitoringJob();
 
-
     }
 
 }

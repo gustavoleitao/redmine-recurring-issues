@@ -5,10 +5,13 @@ package br.com.logique.scheduledissues.model.service;
  */
 public class RedmineServiceFactory {
 
+    private static String REDMINE_KEY = System.getProperty("redmine.key", "");
+    private static String REDMINE_URL = System.getProperty("redmine.url", "");
+
     public static RedmineService createRedmineService() {
         return new RedmineService.BuilderRedmineService()
-                .withApiAccessKey("029b49eaa97e110f0ce5d8149cb4d622365eba58")
-                .withURI("http://209.208.90.122/redmine")
+                .withApiAccessKey(REDMINE_KEY)
+                .withURI(REDMINE_URL)
                 .build();
     }
 

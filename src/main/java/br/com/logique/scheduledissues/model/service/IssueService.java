@@ -6,6 +6,7 @@ import br.com.logique.scheduledissues.model.domain.ScheduledIssueEntity;
 import br.com.logique.scheduledissues.model.dto.ScheduledIssue;
 import br.com.logique.scheduledissues.util.ScheduledDtoToEntity;
 import br.com.logique.scheduledissues.util.ScheduledEntityToDto;
+import org.quartz.CronExpression;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,4 +37,7 @@ public class IssueService {
         issuesDaoDao.remove(scheduledDtoToEntity.apply(issue));
     }
 
+    public boolean validateCron(String value) {
+        return CronExpression.isValidExpression(value);
+    }
 }

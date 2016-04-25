@@ -21,6 +21,7 @@ public class ScheduledDtoToEntity implements Function<ScheduledIssue, ScheduledI
         entity.setTracker(scheduledIssue.getTracker());
         entity.setUserAssigned(scheduledIssue.getUserAssigned());
         entity.setWatchers(scheduledIssue.getWatchers());
+        entity.setDurationDays(scheduledIssue.getDuration());
         return entity;
     }
 

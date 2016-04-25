@@ -1,7 +1,7 @@
 /**
  * Created by gustavo on 13/04/2016.
  */
-var myApp = angular.module("issues", []);
+var myApp = angular.module("issues", ['ngMessages','remoteValidation',]);
 
 myApp.controller("issueController", function ($scope, $http, redmineService, issueService, Issue) {
 
